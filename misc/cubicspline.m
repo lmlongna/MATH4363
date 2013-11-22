@@ -1,0 +1,113 @@
+function [s,errflag] = cubicspline(n,a)
+%
+% Author: Matthew Petty
+% Written in GNU Octave
+%
+% This program computes the natural cubic spline for
+% given knots.
+% 
+% Inputs:
+%	n:	a row vector containing the nodes
+%	a:	a row vector containing the corresponding
+%		function values
+%
+% Outputs:
+%	s:	a matrix containing the coefficients of
+%		the computed spline
+%
+% Error flags:
+%	 0	: no error
+%	-1	: the inputs were not vectors
+%	 1	: the knots were incomplete
+
+errflag=0;
+
+% First we make sure our vectors are of the appropriate type
+[row,col]=size(n);
+if col==1
+  n=n';
+elseif row != 1
+  errflag = -1;
+  return;
+end
+
+[row,col] = size(a);
+if col==1
+  n=n';
+elseif row != 1
+  errflag = -1;
+  return;
+end
+
+if size(a) != size(n)
+  errflag = 1;
+  return;
+end
+
+%Step 1. Note: col=n+1.
+for k=1:1:col-1		% from the first to the next to last node
+  h(k)=n(k+1)-n(k);	% h(k) is the step-size from n(k) to n(k+1)
+end
+
+%Step 2. This step sets the result vector.
+for k=2:1:col-1		% from the second to the next to last node
+  alpha(k)=(3/h(k))*(a(k+1)-a(k)) - (3/h(k-1))*(a(k)-a(k-1));
+end;
+alpha(col)=0;
+
+%Step 3
+l(1)=1;
+mu(1)=0;
+z(1)=0;
+
+A(1)=1;
+A(2:col)=zeros;
+
+for k=2:1:col-1
+  A(k,k-1)=h(k-1);
+  A(k,k)=2*h(k)-h(k-1);
+  A(k,k+1)=h(k);
+end;
+
+A(col,1:col-1)=zeros;
+A(col,col)=1;
+A
+alpha'
+
+R=inv(A)*alpha';
+ R
+
+%{
+%Step 4
+for k=2:1:col-1		% from the second to the next to last node
+  l(k)=2(n(k+1)-n(k)) - h(k-1)*mu(k-1);	% I'm not sure this is correct.
+  mu(k)=h(k)/l(k);
+  z(k)=(alpha(k)-h(k-1)*z(k-1))/l(k);
+end;
+%}
+
+%Step 5
+l(col)=1;
+z(col)=0;
+c=b=d=zeros(1,col-1);	% necessary as the next loop is decreasing
+c(col)=0;
+
+
+%Step 6 - there is something wrong here
+for k=col-1:-1:1		% from the next to last node to the first
+  c(k)=R(k);		% I'm not sure this is correct.
+  b(k)=(a(k+1)-a(k))/(h(k)) - (h(k)/3)*(c(k+1)+2*c(k));
+  d(k)=(c(k+1)-c(k))/(3*h(k));
+end
+
+
+%Step 7
+for k=1:1:col-1
+  s(k,1)=a(k);
+  s(k,2)=b(k);
+  s(k,3)=c(k);
+  s(k,4)=d(k);
+end
+
+
+return;

@@ -1,0 +1,18 @@
+degree 3 truncation error:
+ans = -0.00965439771893176
+degree 5 truncation error:
+ans = -3.02483915125912e-04
+degree 5 truncation error:
+ans =
+
+  -3.02483915125912e-04  -1.22417775850070e-03
+
+degree 8 truncation error:
+ans =
+
+  -2.62314324499524e-05  -1.81257687983383e-05   1.57709172784015e-04
+
+octave:93> attempting to save variables to 'octave-core'...
+save to 'octave-core' complete
+error: stdin is not a tty!
+

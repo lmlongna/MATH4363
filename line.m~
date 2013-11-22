@@ -1,0 +1,6 @@
+function [fx] = line(x);
+%
+% 
+fx=-4*x+2;
+disp(fx);
+return;

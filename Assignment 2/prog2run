@@ -1,0 +1,22 @@
+ 
+ 
+   Bisect output:
+root approx:
+p =  7.85398164391518e-01
+ 
+error:
+ans =  9.94069493387428e-10
+ 
+number of fcn evals:
+nfb =  2.70000000000000e+01
+ 
+ 
+   Secant output:
+root approx:
+x =  7.85398163397448e-01
+ 
+error:
+ans =  0.00000000000000e+00
+ 
+number of fcn evals:
+nfs =  5.00000000000000e+00
